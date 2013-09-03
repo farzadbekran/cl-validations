@@ -3,6 +3,8 @@
 (in-package #:cl-validations)
 
 (defun object-validp (object)
+  "returns t if every slot value in the object is valid, if there are errors,
+returns a list containing the slot names and the error messages returned"
   (if (typep object 'attributes-object)
       (let ((slots (closer-mop:class-slots (class-of object)))
 	    (results nil))
@@ -17,6 +19,8 @@
       (values t nil)))
 
 (defun slot-validp (object slot-name)
+  "returns t if the given slot value in the object is valid, if not,
+returns nil and the error message defined in the :error-msg attrib"
   (if (typep object 'attributes-object)
       (let* ((validation (slot-attrib object slot-name :validation))
 	     (validator-func (let ((validator (getf validation :test)))
